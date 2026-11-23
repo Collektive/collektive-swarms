@@ -89,26 +89,26 @@ fun Aggregate<Int>.selfAlignedActuation(
     control: SpeedControl2D?,
     parameters: SelfAlignmentParameters = SelfAlignmentParameters(),
     random: Random = Random.Default,
-): SpeedControl2D =
-    evolve(zeroSpeed) { lastCommand -> // Applied since the last round
-        val commanded = evolve(zeroSpeed) { it + lastCommand }
-        val alignment = evolve(FrameAlignment()) {
-            it.learn(frame.position, commanded, parameters.forgettingFactor, parameters.maxDisplacement)
-        }
-        val steering = evolve(false) {
-            it || alignment.isConfident(parameters.minMotionEnergy, parameters.minConfidence)
-        }
-        val probe = evolve(zeroSpeed to false) { (direction, out) ->
-            if (out) direction * -1.0 to false else random.randomDirection() to true
-        }.first * parameters.explorationSpeed
-        val unlocalized = evolve(0) { if (control == null) it + 1 else 0 } // Rounds since the device lost the frame
-        // Run and tumble: the direction is kept for one step and reversed on the next, else drawn anew.
-        val command = when {
-            control == null -> if (unlocalized > parameters.maxFrameWait) probe else zeroSpeed
-            frame.isReference -> zeroSpeed // The anchors are the reference frame: they stay still.
-            !steering -> probe
-            else -> alignment.toBody(control)
-        }
-        val velocity = command.limitedTo(parameters.maxSpeed).takeIf { it.norm.isFinite() } ?: zeroSpeed
-        velocity
+): SpeedControl2D = evolve(zeroSpeed) { lastCommand ->
+    // Applied since the last round
+    val commanded = evolve(zeroSpeed) { it + lastCommand }
+    val alignment = evolve(FrameAlignment()) {
+        it.learn(frame.position, commanded, parameters.forgettingFactor, parameters.maxDisplacement)
     }
+    val steering = evolve(false) {
+        it || alignment.isConfident(parameters.minMotionEnergy, parameters.minConfidence)
+    }
+    val probe = evolve(zeroSpeed to false) { (direction, out) ->
+        if (out) direction * -1.0 to false else random.randomDirection() to true
+    }.first * parameters.explorationSpeed
+    val unlocalized = evolve(0) { if (control == null) it + 1 else 0 } // Rounds since the device lost the frame
+    // Run and tumble: the direction is kept for one step and reversed on the next, else drawn anew.
+    val command = when {
+        control == null -> if (unlocalized > parameters.maxFrameWait) probe else zeroSpeed
+        frame.isReference -> zeroSpeed // The anchors are the reference frame: they stay still.
+        !steering -> probe
+        else -> alignment.toBody(control)
+    }
+    val velocity = command.limitedTo(parameters.maxSpeed).takeIf { it.norm.isFinite() } ?: zeroSpeed
+    velocity
+}

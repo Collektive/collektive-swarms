@@ -12,7 +12,9 @@ fun interface LocationSensor {
     fun coordinates(): Position
 }
 
-/** A sensor of the displacement (dx, dy) of the neighbors, in a frame aligned with the global one, without positions. */
+/**
+ * A sensor of the displacement (dx, dy) of the neighbors, in a frame aligned with the global one, without positions.
+ */
 fun interface RelativePositionSensor {
     /** The vector going from [neighbor] to this device (`self - neighbor`). */
     fun relativeTo(neighbor: Int): Vector2D
