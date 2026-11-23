@@ -1,9 +1,9 @@
-package it.unibo.collektive.localization
+package it.unibo.collektive.swarms.localization
 
-import it.unibo.collektive.geometry.Position
-import it.unibo.collektive.geometry.SpeedControl2D
-import it.unibo.collektive.geometry.Vector2D
-import it.unibo.collektive.geometry.minus
+import it.unibo.collektive.swarms.geometry.Position
+import it.unibo.collektive.swarms.geometry.SpeedControl2D
+import it.unibo.collektive.swarms.geometry.Vector2D
+import it.unibo.collektive.swarms.geometry.minus
 import kotlin.math.abs
 import kotlin.math.hypot
 import kotlin.math.pow

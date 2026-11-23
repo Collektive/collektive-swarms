@@ -1,4 +1,4 @@
-package it.unibo.collektive.localization
+package it.unibo.collektive.swarms.localization
 
 /** The part a device plays in fixing the frame. */
 enum class AnchorRole {

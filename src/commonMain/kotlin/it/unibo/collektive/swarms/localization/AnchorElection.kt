@@ -1,4 +1,4 @@
-package it.unibo.collektive.localization
+package it.unibo.collektive.swarms.localization
 
 import it.unibo.collektive.aggregate.Field
 import it.unibo.collektive.aggregate.api.Aggregate

@@ -1,6 +1,6 @@
-package it.unibo.collektive.localization
+package it.unibo.collektive.swarms.localization
 
-import it.unibo.collektive.geometry.Position
+import it.unibo.collektive.swarms.geometry.Position
 import kotlin.math.max
 import kotlin.math.pow
 import kotlin.math.sqrt

@@ -1,19 +1,19 @@
-package it.unibo.collektive.localization
+package it.unibo.collektive.swarms.localization
 
 import it.unibo.collektive.aggregate.Field
 import it.unibo.collektive.aggregate.api.Aggregate
 import it.unibo.collektive.aggregate.api.mapNeighborhood
 import it.unibo.collektive.aggregate.api.neighboring
 import it.unibo.collektive.aggregate.values
-import it.unibo.collektive.alchemist.device.sensors.RelativePositionSensor
-import it.unibo.collektive.geometry.Position
-import it.unibo.collektive.geometry.Vector2D
-import it.unibo.collektive.geometry.minus
-import it.unibo.collektive.geometry.plus
-import it.unibo.collektive.geometry.times
-import it.unibo.collektive.geometry.zeroSpeed
 import it.unibo.collektive.stdlib.spreading.distanceTo
 import it.unibo.collektive.stdlib.spreading.gradientCast
+import it.unibo.collektive.swarms.geometry.Position
+import it.unibo.collektive.swarms.geometry.Vector2D
+import it.unibo.collektive.swarms.geometry.minus
+import it.unibo.collektive.swarms.geometry.plus
+import it.unibo.collektive.swarms.geometry.times
+import it.unibo.collektive.swarms.geometry.zeroSpeed
+import it.unibo.collektive.swarms.sensors.RelativePositionSensor
 import kotlin.Double.Companion.NaN
 
 /**
