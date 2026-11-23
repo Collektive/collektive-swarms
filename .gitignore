@@ -1,23 +1,7 @@
-# Ignore Gradle project-specific cache directory
 .gradle
-.idea/
-.spyproject/
-build/
-charts/
-data_summary_*
-timeprocessed
-.env
 .kotlin
+.idea/
+build/
 .DS_Store
 /node_modules/
-/data/
-python/.cache/
-__pycache__/
-/data-old/
-
-# Detached cloud batches
-/logs/
-.cloud-batch.lock
-.cloud-batch.pid
-/data-before-final-run-*/
-/charts-before-final-run-*/
+kotlin-js-store/
