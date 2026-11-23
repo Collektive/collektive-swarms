@@ -45,31 +45,31 @@ jobs:
           # signing-key: ${{ secrets.SIGNING_KEY }}
           # signing-password: ${{ secrets.SIGNING_PASSWORD }}
 
-  # Publishing disabled for now: semantic-release would tag, release on GitHub, and publish on Maven Central
-  # release:
-    # needs:
-      # - build
-    # runs-on: macos-26
-    # steps:
-      # - name: Checkout
-        # uses: actions/checkout@v7.0.1
-        # with:
-          # token: ${{ secrets.DEPLOYMENT_TOKEN }}
-      # - name: Install Node
-        # uses: actions/setup-node@v7.1.0
-        # with:
-          # node-version-file: package.json
-      # - uses: DanySK/build-check-deploy-gradle-action@4.0.52
-        # with:
-          # retries-on-failure: '1'
-          # build-command: true
-          # check-command: true
-          # deploy-command: |
-            # npm install
-            # npx semantic-release
-          # should-run-codecov: false
-          # should-deploy: true
-          # github-token: ${{ github.token }}
+  # Tags and releases on GitHub; Maven Central is disabled in release.config.js
+  release:
+    needs:
+      - build
+    runs-on: macos-26
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7.0.1
+        with:
+          token: ${{ secrets.DEPLOYMENT_TOKEN }}
+      - name: Install Node
+        uses: actions/setup-node@v7.1.0
+        with:
+          node-version-file: package.json
+      - uses: DanySK/build-check-deploy-gradle-action@4.0.52
+        with:
+          retries-on-failure: '1'
+          build-command: true
+          check-command: true
+          deploy-command: |
+            npm install
+            npx semantic-release
+          should-run-codecov: false
+          should-deploy: true
+          github-token: ${{ secrets.DEPLOYMENT_TOKEN }} # As in collektive-experiments-bootstrap: GITHUB_TOKEN cannot trigger workflows nor bypass branch protection
           # maven-central-username: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
           # maven-central-password: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
           # npm-token: ${{ secrets.NPM_TOKEN }}
@@ -80,7 +80,7 @@ jobs:
     runs-on: ubuntu-26.04
     needs:
       - build
-      # - release
+      - release
     if: >-
       always() && (
         contains(join(needs.*.result, ','), 'failure')
