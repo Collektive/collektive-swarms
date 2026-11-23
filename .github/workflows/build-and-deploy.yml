@@ -12,15 +12,16 @@ jobs:
         os: [ windows-2025, macos-26, ubuntu-26.04 ]
     runs-on: ${{ matrix.os }}
     steps:
-      - name: Find if secrets are available
-        id: detect-secrets
-        uses: DanySK/are-secrets-available@1.0.0
-        with:
-          secrets: ${{ toJson(secrets) }}
-      - name: Set run-with-secrets condition
-        id: require-secrets
-        run: |
-          echo "run-with-secrets=${{ steps.detect-secrets.outputs.has-secrets == 'true' && !github.event.repository.fork }}" >> $GITHUB_OUTPUT
+      # Publishing disabled for now: these steps only decide whether to deploy
+      # - name: Find if secrets are available
+        # id: detect-secrets
+        # uses: DanySK/are-secrets-available@1.0.0
+        # with:
+          # secrets: ${{ toJson(secrets) }}
+      # - name: Set run-with-secrets condition
+        # id: require-secrets
+        # run: |
+          # echo "run-with-secrets=${{ steps.detect-secrets.outputs.has-secrets == 'true' && !github.event.repository.fork }}" >> $GITHUB_OUTPUT
       - name: Checkout
         uses: actions/checkout@v7.0.1
         with:
@@ -28,56 +29,58 @@ jobs:
           fetch-tags: true
       - uses: DanySK/build-check-deploy-gradle-action@4.0.52
         with:
-          # Deploy from macOS since it supports all the platforms
-          should-deploy: ${{ runner.os == 'macos' && steps.require-secrets.outputs.run-with-secrets == 'true' }}
-          deploy-command: >-
-            ./gradlew
-            publishAllPublicationsToProjectLocalRepository
-            zipMavenCentralPortalPublication
-            releaseMavenCentralPortalPublication
-            --dry-run
+          should-deploy: false # Publishing disabled for now: restore the lines below to enable it
+          # # Deploy from macOS since it supports all the platforms
+          # should-deploy: ${{ runner.os == 'macos' && steps.require-secrets.outputs.run-with-secrets == 'true' }}
+          # deploy-command: >-
+            # ./gradlew
+            # publishAllPublicationsToProjectLocalRepository
+            # zipMavenCentralPortalPublication
+            # releaseMavenCentralPortalPublication
+            # --dry-run
           should-run-codecov: ${{ runner.os == 'Linux' }}
           codecov-token: ${{ secrets.CODECOV_TOKEN }}
-          maven-central-username: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
-          maven-central-password: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
-          signing-key: ${{ secrets.SIGNING_KEY }}
-          signing-password: ${{ secrets.SIGNING_PASSWORD }}
+          # maven-central-username: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          # maven-central-password: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          # signing-key: ${{ secrets.SIGNING_KEY }}
+          # signing-password: ${{ secrets.SIGNING_PASSWORD }}
 
-  release:
-    needs:
-      - build
-    runs-on: macos-26
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7.0.1
-        with:
-          token: ${{ secrets.DEPLOYMENT_TOKEN }}
-      - name: Install Node
-        uses: actions/setup-node@v7.1.0
-        with:
-          node-version-file: package.json
-      - uses: DanySK/build-check-deploy-gradle-action@4.0.52
-        with:
-          retries-on-failure: '1'
-          build-command: true
-          check-command: true
-          deploy-command: |
-            npm install
-            npx semantic-release
-          should-run-codecov: false
-          should-deploy: true
-          github-token: ${{ github.token }}
-          maven-central-username: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
-          maven-central-password: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
-          npm-token: ${{ secrets.NPM_TOKEN }}
-          signing-key: ${{ secrets.SIGNING_KEY }}
-          signing-password: ${{ secrets.SIGNING_PASSWORD }}
+  # Publishing disabled for now: semantic-release would tag, release on GitHub, and publish on Maven Central
+  # release:
+    # needs:
+      # - build
+    # runs-on: macos-26
+    # steps:
+      # - name: Checkout
+        # uses: actions/checkout@v7.0.1
+        # with:
+          # token: ${{ secrets.DEPLOYMENT_TOKEN }}
+      # - name: Install Node
+        # uses: actions/setup-node@v7.1.0
+        # with:
+          # node-version-file: package.json
+      # - uses: DanySK/build-check-deploy-gradle-action@4.0.52
+        # with:
+          # retries-on-failure: '1'
+          # build-command: true
+          # check-command: true
+          # deploy-command: |
+            # npm install
+            # npx semantic-release
+          # should-run-codecov: false
+          # should-deploy: true
+          # github-token: ${{ github.token }}
+          # maven-central-username: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          # maven-central-password: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          # npm-token: ${{ secrets.NPM_TOKEN }}
+          # signing-key: ${{ secrets.SIGNING_KEY }}
+          # signing-password: ${{ secrets.SIGNING_PASSWORD }}
 
   success:
     runs-on: ubuntu-26.04
     needs:
       - build
-      - release
+      # - release
     if: >-
       always() && (
         contains(join(needs.*.result, ','), 'failure')
