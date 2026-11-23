@@ -1,14 +1,14 @@
-package it.unibo.collektive.coverage
+package it.unibo.collektive.swarms.coverage
 
-import it.unibo.collektive.geometry.Position
-import it.unibo.collektive.geometry.SpeedControl2D
-import it.unibo.collektive.geometry.Vector2D
-import it.unibo.collektive.geometry.dot
-import it.unibo.collektive.geometry.minus
-import it.unibo.collektive.geometry.plus
-import it.unibo.collektive.geometry.times
-import it.unibo.collektive.geometry.zeroSpeed
-import it.unibo.collektive.sdf.SDF
+import it.unibo.collektive.swarms.geometry.Position
+import it.unibo.collektive.swarms.geometry.SpeedControl2D
+import it.unibo.collektive.swarms.geometry.Vector2D
+import it.unibo.collektive.swarms.geometry.dot
+import it.unibo.collektive.swarms.geometry.minus
+import it.unibo.collektive.swarms.geometry.plus
+import it.unibo.collektive.swarms.geometry.times
+import it.unibo.collektive.swarms.geometry.zeroSpeed
+import it.unibo.collektive.swarms.sdf.SDF
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin

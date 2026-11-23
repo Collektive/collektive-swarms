@@ -1,10 +1,10 @@
-package it.unibo.collektive.coverage
+package it.unibo.collektive.swarms.coverage
 
-import it.unibo.collektive.geometry.Position
-import it.unibo.collektive.geometry.SpeedControl2D
-import it.unibo.collektive.geometry.Vector2D
-import it.unibo.collektive.geometry.times
-import it.unibo.collektive.sdf.SDF
+import it.unibo.collektive.swarms.geometry.Position
+import it.unibo.collektive.swarms.geometry.SpeedControl2D
+import it.unibo.collektive.swarms.geometry.Vector2D
+import it.unibo.collektive.swarms.geometry.times
+import it.unibo.collektive.swarms.sdf.SDF
 
 /** How the neighbors move a device apart. */
 sealed interface RepulsionLaw {

@@ -1,11 +1,11 @@
-package it.unibo.collektive.coverage
+package it.unibo.collektive.swarms.coverage
 
-import it.unibo.collektive.geometry.Position
-import it.unibo.collektive.geometry.SpeedControl2D
-import it.unibo.collektive.geometry.times
-import it.unibo.collektive.geometry.zeroSpeed
-import it.unibo.collektive.sdf.SDF
-import it.unibo.collektive.sdf.gradientToSDF
+import it.unibo.collektive.swarms.geometry.Position
+import it.unibo.collektive.swarms.geometry.SpeedControl2D
+import it.unibo.collektive.swarms.geometry.times
+import it.unibo.collektive.swarms.geometry.zeroSpeed
+import it.unibo.collektive.swarms.sdf.SDF
+import it.unibo.collektive.swarms.sdf.gradientToSDF
 
 private const val GRADIENT_STEP = 0.001 // Step of the central differences on the SDF, well below the lattice spacing
 

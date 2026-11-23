@@ -1,17 +1,15 @@
-package it.unibo.collektive.coverage
+package it.unibo.collektive.swarms.coverage
 
-import it.unibo.alchemist.collektive.device.CollektiveDevice
-import it.unibo.alchemist.model.Node.Companion.asProperty
 import it.unibo.collektive.aggregate.api.Aggregate
-import it.unibo.collektive.geometry.Position
-import it.unibo.collektive.geometry.SpeedControl2D
-import it.unibo.collektive.geometry.Vector2D
-import it.unibo.collektive.geometry.dot
-import it.unibo.collektive.geometry.limitedTo
-import it.unibo.collektive.geometry.minus
-import it.unibo.collektive.geometry.plus
-import it.unibo.collektive.geometry.times
-import it.unibo.collektive.sdf.SDF
+import it.unibo.collektive.swarms.geometry.Position
+import it.unibo.collektive.swarms.geometry.SpeedControl2D
+import it.unibo.collektive.swarms.geometry.Vector2D
+import it.unibo.collektive.swarms.geometry.dot
+import it.unibo.collektive.swarms.geometry.limitedTo
+import it.unibo.collektive.swarms.geometry.minus
+import it.unibo.collektive.swarms.geometry.plus
+import it.unibo.collektive.swarms.geometry.times
+import it.unibo.collektive.swarms.sdf.SDF
 import kotlin.math.max
 
 // The largest push of the neighbors out of the shape, as a fraction of the pull of the shape: enough to keep the
@@ -37,25 +35,27 @@ fun interface FormationControl {
     companion object {
         /**
          * Combines the inward pull of the [SDF] outside the shape with Voronoi/Lloyd-based spacing clipped to its
-         * interior (see [latticeVelocity]).
+         * interior, as set by the [parameters] (see [latticeVelocity]).
          */
-        context(device: CollektiveDevice<*>)
-        fun lattice(): FormationControl = FormationControl { shape, position, offsets ->
-            latticeVelocity(shape, position, offsets)
-        }
+        fun lattice(parameters: LatticeParameters = LatticeParameters()): FormationControl =
+            FormationControl { shape, position, offsets ->
+                latticeVelocity(shape, position, offsets, parameters)
+            }
     }
 }
 
 /**
  * The lattice velocity for a device at [position] whose neighbors are at [offsets] (`neighbor - self`), both in the
  * frame of [shape]: however the device got them (GPS, a leader, trilateration), it then forms the same lattice.
- * The parameters are the [LatticeParameters] of the device, built by the simulation file (see `positionBased.yml`).
+ * The [parameters] set how the neighbors push the device and how fast it moves.
  */
-context(device: CollektiveDevice<*>)
-fun Aggregate<Int>.latticeVelocity(shape: SDF, position: Position, offsets: List<Vector2D>): SpeedControl2D {
-    val parameters: LatticeParameters<Any?> = device.node.asProperty()
+fun Aggregate<Int>.latticeVelocity(
+    shape: SDF,
+    position: Position,
+    offsets: List<Vector2D>,
+    parameters: LatticeParameters = LatticeParameters(),
+): SpeedControl2D {
     val border = LocalBorder.of(shape, position)
-    device["distanceToSDF"] = border.distance
     val repulsion = parameters.repulsion.control(offsets, shape, position)
     val control = when {
         border.isInside -> repulsion // The shape clipping the cells keeps the devices off the border
