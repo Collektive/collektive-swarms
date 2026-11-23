@@ -11,4 +11,4 @@ develocity {
     }
 }
 
-rootProject.name = "experiments-2026-seams-ac-sdf"
+rootProject.name = "collektive-swarms"
