@@ -1,4 +1,4 @@
-package it.unibo.collektive.geometry
+package it.unibo.collektive.swarms.geometry
 
 import kotlin.math.cos
 import kotlin.math.hypot
